@@ -22,6 +22,7 @@ enum Constants {
   FCTRL_ADRACKREQ = 0x40,
   FCTRL_ACK = 0x20,
   FCTRL_FPENDING = 0x10,
+  FCTRL_CLASSB = 0x10,
   DLSETTINGS_RXONEDROFFSET_MASK = 0x70,
   DLSETTINGS_RXONEDROFFSET_POS = 4,
   DLSETTINGS_RXTWODATARATE_MASK = 0x0f,
@@ -585,6 +586,14 @@ class LoraPacket {
   }
 
   /**
+   * Provide FCtrl.getFCtrlClassB as a flag
+   */
+  public getFCtrlClassB(): boolean | null {
+    if (!this.FCtrl) return null;
+    return !!(this.FCtrl.readUInt8(0) & Constants.FCTRL_CLASSB);
+  }
+
+  /**
    * Provide FCtrl.FPending as a flag
    */
   public getFCtrlFPending(): boolean | null {
@@ -815,6 +824,7 @@ class LoraPacket {
         msg += "        FCtrl.FPending = " + this.getFCtrlFPending() + "\n";
       } else {
         msg += "       FCtrl.ADRACKReq = " + this.getFCtrlADRACKReq() + "\n";
+        msg += "          FCtrl.ClassB = " + this.getFCtrlClassB() + "\n";
       }
     }
     return msg;
