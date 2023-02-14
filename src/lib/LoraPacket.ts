@@ -683,6 +683,17 @@ class LoraPacket {
     }
   }
 
+  /**
+  * Provide CFList.CFListType as buffer
+  */
+  public getCFListType(): Buffer {
+    if (this.CFList && this.CFList.length === 16) {
+      return reverseBuffer(this.CFList.slice(15, 15 + 1));
+    } else {
+      return Buffer.alloc(0);
+    }
+  }
+
   public getBuffers() {
     return this;
   }
@@ -767,12 +778,13 @@ class LoraPacket {
       msg += "           RxDelay.Del = " + this.getRxDelayDel() + "\n";
       msg += "\n";
       if (this.CFList.length === 16) {
-        msg += "              ( CFList = FreqCh4[3] | FreqCh5[3] | FreqCh6[3] | FreqCh7[3] | FreqCh8[3] )\n";
+        msg += "              ( CFList = FreqCh4[3] | FreqCh5[3] | FreqCh6[3] | FreqCh7[3] | FreqCh8[3] | CFListType[1] )\n";
         msg += "               FreqCh4 = " + asHexString(this.getCFListFreqChFour()) + "\n";
         msg += "               FreqCh5 = " + asHexString(this.getCFListFreqChFive()) + "\n";
         msg += "               FreqCh6 = " + asHexString(this.getCFListFreqChSix()) + "\n";
         msg += "               FreqCh7 = " + asHexString(this.getCFListFreqChSeven()) + "\n";
         msg += "               FreqCh8 = " + asHexString(this.getCFListFreqChEight()) + "\n";
+        msg += "            CFListType = " + asHexString(this.getCFListType()) + "\n";
       }
     } else if (this.isDataMessage()) {
       msg += "Message Type = Data" + "\n";
