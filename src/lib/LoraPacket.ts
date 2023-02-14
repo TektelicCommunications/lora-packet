@@ -529,6 +529,14 @@ class LoraPacket {
   }
 
   /**
+   * Provide FOptsLen as a number
+   */
+  public getFOptsLen(): number {
+    const FCtrl = this.FCtrl.readInt8(0);
+    return FCtrl & 0x0f;
+  }
+
+  /**
    * Provide MType as a string
    */
   public getMType(): string {
@@ -814,6 +822,7 @@ class LoraPacket {
       msg += "                 FCtrl = " + asHexString(this.FCtrl) + "\n"; //TODO as binary?
       msg += "                  FCnt = " + asHexString(this.FCnt) + " (Big Endian)\n";
       msg += "                 FOpts = " + asHexString(this.FOpts) + "\n";
+      msg += "              FOptsLen = " + this.getFOptsLen() + "\n";
       msg += "\n";
       msg += "          Message Type = " + this.getMType() + "\n";
       msg += "             Direction = " + this.getDir() + "\n";
