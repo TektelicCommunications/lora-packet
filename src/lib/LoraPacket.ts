@@ -521,6 +521,13 @@ class LoraPacket {
   }
 
   /**
+   * Provide DevNonce as a number
+   */
+  public getDevNonce(): number {
+    return this.DevNonce.readUInt16BE(0);
+  }
+
+  /**
    * Provide MType as a string
    */
   public getMType(): string {
@@ -736,7 +743,7 @@ class LoraPacket {
       msg += "          ( MACPayload = AppEUI[8] | DevEUI[8] | DevNonce[2] )\n";
       msg += "                AppEUI = " + asHexString(this.AppEUI) + "\n";
       msg += "                DevEUI = " + asHexString(this.DevEUI) + "\n";
-      msg += "              DevNonce = " + asHexString(this.DevNonce) + "\n";
+      msg += "              DevNonce = " + asHexString(this.DevNonce)  + " (" + this.getDevNonce() +  ")"+ "\n";
     } else if (this.isJoinAcceptMessage()) {
       msg += "          Message Type = Join Accept" + "\n";
       msg += "            PHYPayload = " + asHexString(this.PHYPayload).toUpperCase() + "\n";
