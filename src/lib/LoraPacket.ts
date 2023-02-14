@@ -1,4 +1,4 @@
-import { reverseBuffer, asHexString } from "./util";
+import { reverseBuffer, asHexString, asBinaryString } from "./util";
 import { decrypt, decryptJoin, decryptFOpts } from "./crypto";
 import { recalculateMIC } from "./mic";
 import { Buffer } from "buffer";
@@ -23,6 +23,8 @@ enum Constants {
   FCTRL_ACK = 0x20,
   FCTRL_FPENDING = 0x10,
   FCTRL_CLASSB = 0x10,
+  MHDR_MAJOR_MASK = 0x3,
+  MHDR_MAJOR_POS = 0,
   DLSETTINGS_RXONEDROFFSET_MASK = 0x70,
   DLSETTINGS_RXONEDROFFSET_POS = 4,
   DLSETTINGS_RXTWODATARATE_MASK = 0x0f,
@@ -522,6 +524,14 @@ class LoraPacket {
   }
 
   /**
+   * Provide MHDR.Major as a number
+   */
+  public getMHDRMajor(): number {
+    if (this.MHDR) return (this.MHDR.readUInt8(0) & Constants.MHDR_MAJOR_MASK) >> Constants.MHDR_MAJOR_POS;
+    return -1;
+  }
+
+  /**
    * Provide DevNonce as a number
    */
   public getDevNonce(): number {
@@ -764,7 +774,7 @@ class LoraPacket {
       msg += "            PHYPayload = " + asHexString(this.PHYPayload).toUpperCase() + "\n";
       msg += "\n";
       msg += "          ( PHYPayload = MHDR[1] | MACPayload[..] | MIC[4] )\n";
-      msg += "                  MHDR = " + asHexString(this.MHDR) + "\n";
+      msg += "                  MHDR = " + asHexString(this.MHDR) + ", Major = " + asBinaryString(this.getMHDRMajor()) + "\n";
       msg += "            MACPayload = " + asHexString(this.MACPayload) + "\n";
       msg += "                   MIC = " + asHexString(this.MIC) + "\n";
       msg += "\n";
@@ -777,7 +787,7 @@ class LoraPacket {
       msg += "            PHYPayload = " + asHexString(this.PHYPayload).toUpperCase() + "\n";
       msg += "\n";
       msg += "          ( PHYPayload = MHDR[1] | MACPayload[..] | MIC[4] )\n";
-      msg += "                  MHDR = " + asHexString(this.MHDR) + "\n";
+      msg += "                  MHDR = " + asHexString(this.MHDR) + ", Major = " + asBinaryString(this.getMHDRMajor()) + "\n";
       msg += "            MACPayload = " + asHexString(this.MACPayload) + "\n";
       msg += "                   MIC = " + asHexString(this.MIC) + "\n";
       msg += "\n";
@@ -808,7 +818,7 @@ class LoraPacket {
       msg += "            PHYPayload = " + asHexString(this.PHYPayload).toUpperCase() + "\n";
       msg += "\n";
       msg += "          ( PHYPayload = MHDR[1] | MACPayload[..] | MIC[4] )\n";
-      msg += "                  MHDR = " + asHexString(this.MHDR) + "\n";
+      msg += "                  MHDR = " + asHexString(this.MHDR) + ", Major = " + asBinaryString(this.getMHDRMajor()) + "\n";
       msg += "            MACPayload = " + asHexString(this.MACPayload) + "\n";
       msg += "                   MIC = " + asHexString(this.MIC) + "\n";
       msg += "\n";
