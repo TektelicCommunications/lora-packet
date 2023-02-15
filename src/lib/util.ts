@@ -4,7 +4,7 @@ export function reverseBuffer(buffer: Buffer): Buffer {
 }
 
 export function asHexString(buffer: Buffer) {
-  return buffer.toString("hex").toUpperCase();
+  return buffer.length > 0 ? "0x" + buffer.toString("hex").toUpperCase() : "";
 }
 
 export function asBinaryString(number: number) {
